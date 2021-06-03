@@ -1,0 +1,78 @@
+package com.wecaretechnology.covid;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.os.Bundle;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.wecaretechnology.covid.Adapter.CountryAdapter;
+import com.wecaretechnology.covid.Model.AllCountriesModel.Countryinfo;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class AllCountriesActivity extends AppCompatActivity {
+
+    RecyclerView recyclerView;
+    List<Countryinfo> countryinfoList;
+    CountryAdapter countryAdapter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_all_countries);
+        recyclerView = findViewById(R.id.recyclerView);
+        countryinfoList= new ArrayList<>();
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        apicall();
+    }
+
+    private void apicall() {
+        String URL = "https://corona.lmao.ninja/v2/countries";
+        StringRequest request = new StringRequest(Request.Method.GET, URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONArray jsonArray= new JSONArray(response);
+                            for(int i=0; i<jsonArray.length();i++){
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String countryname=jsonObject.getString("country");
+
+                                JSONObject jsonObject1 = jsonObject.getJSONObject("countryInfo");
+                                String flag=jsonObject1.getString("flag");
+                                
+                                Countryinfo countryinfo=new Countryinfo(countryname,flag);
+                                countryinfoList.add(countryinfo);
+
+                            }
+
+                       countryAdapter =  new CountryAdapter(AllCountriesActivity.this,countryinfoList);
+                            recyclerView.setAdapter(countryAdapter);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(AllCountriesActivity.this, ""+error, Toast.LENGTH_SHORT).show();
+            }
+        });
+        RequestQueue requestQueue =  Volley.newRequestQueue(this);
+        requestQueue.add(request);
+    }
+}
