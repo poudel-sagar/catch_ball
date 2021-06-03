@@ -1,0 +1,76 @@
+package com.wecaretechnology.covid.Adapter;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.wecaretechnology.covid.Model.AllCountriesModel.Countryinfo;
+import com.wecaretechnology.covid.R;
+
+import java.util.List;
+
+public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.Holder>{
+    Context context;
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public List<Countryinfo> getCountryinfoList() {
+        return countryinfoList;
+    }
+
+    public void setCountryinfoList(List<Countryinfo> countryinfoList) {
+        this.countryinfoList = countryinfoList;
+    }
+
+    List<Countryinfo> countryinfoList;
+
+    @NonNull
+    @Override
+    public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view= LayoutInflater.from(context).inflate(R.layout.countries_list,parent,false);
+
+        return new Holder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull Holder holder, int position) {
+
+        String flag = countryinfoList.get(position).getFlag();
+        String name = countryinfoList.get(position).getName();
+
+        holder.countryName.setText(name);
+        Glide.with(context).load(flag).into(holder.countryFlag);
+
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return countryinfoList.size();
+    }
+
+    class Holder extends RecyclerView.ViewHolder{
+        ImageView countryFlag;
+            TextView countryName;
+        public Holder(@NonNull View itemView) {
+            super(itemView);
+
+            countryFlag=itemView.findViewById(R.id.countryFlag);
+            countryName=itemView.findViewById(R.id.countryName);
+
+        }
+    }
+}
