@@ -1,0 +1,90 @@
+package com.wecaretechnology.covid;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.wecaretechnology.covid.Adapter.CountryAdapter;
+import com.wecaretechnology.covid.Model.AllCountriesModel.Countryinfo;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class DetailActivity extends AppCompatActivity {
+    TextView cases,todayCases,deaths,todayDeaths,recovered,active,critical,globalStats;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_detail);
+
+        cases=findViewById(R.id.tvCases);
+        todayCases=findViewById(R.id.tvtodayCases);
+        deaths=findViewById(R.id.tvDeaths);
+        todayDeaths=findViewById(R.id.tvtodayDeaths);
+        recovered=findViewById(R.id.tvRecovered);
+        active=findViewById(R.id.tvActive);
+        critical=findViewById(R.id.tvCritical);
+        globalStats=findViewById(R.id.globalStats);
+
+
+        Intent intent=getIntent();
+        String countryName = intent.getStringExtra("countryName");
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(countryName);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+        globalStats.setText(countryName+"States");
+
+        ApiCall(countryName);
+    }
+
+    private void ApiCall(String countryName) {
+        String URL = "https://corona.lmao.ninja/v2/countries"+countryName;
+        StringRequest request = new StringRequest(Request.Method.GET, URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            cases.setText(jsonObject.getString("cases"));
+                            todayCases.setText(jsonObject.getString("todayCases"));
+                            todayDeaths.setText(jsonObject.getString("todayDeaths"));
+                            deaths.setText(jsonObject.getString("deaths"));
+                            recovered.setText(jsonObject.getString("recovered"));
+                            active.setText(jsonObject.getString("active"));
+                            critical.setText(jsonObject.getString("critical"));
+
+                            Log.d("cases",jsonObject.getString("cases"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(DetailActivity.this, ""+error, Toast.LENGTH_SHORT).show();
+            }
+        });
+        RequestQueue requestQueue =  Volley.newRequestQueue(this);
+        requestQueue.add(request);
+    }
+
+}
