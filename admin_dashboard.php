@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard </title>
+    <title>Admin Dashboard System</title>
     <link rel="stylesheet" type="text/css" href="bootstrap-4.4.1-dist/css/bootstrap.min.css">
     <script type="text/javascript" src="bootstrap-4.4.1-dist/js/jquery_latest.js"></script>
     <script type="text/javascript" src="bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+
     <style type="text/css">
     #header{
         height: 10%;
@@ -44,18 +45,17 @@
 
     </style>
 
-
-    <script></script>
 </head>
-<body><br>
-    <div id="header">
-        <h3><strong>Student Management System</strong>Email: admin@gmail.com
-        <a href="logout.php">Logout</a>
+<body>
+<div id="header">
+        <h3><strong>Student Management System &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>Email: admin@gmail.com&nbsp;&nbsp;
+        <a href="logout.php">Logout&nbsp;&nbsp;</a>
     
     </h3>
 
-        </div>
-        <span id="top_span"><marquee>This portal is developed by Sagar Poudel</marquee></span>
+    </div>
+    <span id="top_span"><marquee>This portal is developed by Sagar Poudel</marquee></span>
+
 
         <div id="left_side"><br>
             <form action="" method="POST">
@@ -88,12 +88,6 @@
                 
             </form>
         </div>
-        <div id="right_side">
-
-        </div>
-
-
-   
- 
+    
 </body>
 </html>
